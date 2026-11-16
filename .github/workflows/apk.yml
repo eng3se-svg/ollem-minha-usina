@@ -1,13 +1,14 @@
 # Gera o APK de TESTE do app "Ollem - Minha usina" (Android, modo demonstração, sem servidor).
 # Como usar: aba Actions → "APK de teste" → Run workflow. No fim, baixe o APK em "Artifacts".
 # Aceita duas formas de código: a pasta app/ do repositório (em qualquer subpasta) ou um arquivo
-# app-teste.zip na raiz (tem prioridade, para quem atualiza o código pelo navegador).
+# app-teste.zip na raiz (tem prioridade, para quem atualiza o código pelo navegador). Se houver vários
+# (app-teste.zip, app-teste_1.zip, "app-teste (2).zip"…), usa o enviado por último.
 name: APK de teste
 
 on:
   workflow_dispatch:
   push:
-    paths: ['app-teste.zip', '**/app/src/**', '**/app/package.json', '.github/workflows/apk.yml']
+    paths: ['app-teste*.zip', '**/app/src/**', '**/app/package.json', '.github/workflows/apk.yml']
 
 jobs:
   apk:
@@ -15,12 +16,19 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
       - name: Achar o código do app
         id: app
         run: |
-          if [ -f app-teste.zip ]; then
-            mkdir -p _app && unzip -q app-teste.zip -d _app
+          ZIP=""; ULT=0
+          for f in app-teste*.zip; do
+            [ -f "$f" ] || continue
+            T=$(git log -1 --format=%ct -- "$f"); [ "${T:-0}" -ge "$ULT" ] && { ULT=$T; ZIP="$f"; }
+          done
+          if [ -n "$ZIP" ]; then
+            echo "Usando o zip: $ZIP"
+            mkdir -p _app && unzip -q "$ZIP" -d _app
             DIR=$(dirname "$(find _app -name capacitor.config.json -not -path '*/node_modules/*' | head -1)")
           else
             DIR=$(dirname "$(find . -name capacitor.config.json -not -path '*/node_modules/*' | head -1)")
