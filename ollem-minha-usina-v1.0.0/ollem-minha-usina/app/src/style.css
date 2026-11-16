@@ -1,0 +1,51 @@
+/* Ollem - Minha usina · direção D2 (identidade do Ollem Hub, versão limpa) */
+:root {
+  --verde: #11c90a; --verde2: #0ea308; --lima: #8ef705; --ambar: #f2a516; --vermelho: #e5484d; --sol: #ffd23a;
+  --fundo: #f6f7f6; --card: #ffffff; --texto: #151b18; --sub: #78837d; --linha: #eceeed; --trilho: #eef1ef;
+  --acento: #0ea308; --nav: #ffffff; --navtx: #9aa39e; --escuro: #111714;
+}
+.escuro {
+  --fundo: #0c100e; --card: #141a17; --texto: #eef3f0; --sub: #8a968f; --linha: #1d2420; --trilho: #1d2420;
+  --acento: #8ef705; --nav: #0c100e; --navtx: #66726b; --escuro: #141a17;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; background: #e8ecea; }
+body { font-family: Inter, system-ui, -apple-system, sans-serif; color: var(--texto); -webkit-font-smoothing: antialiased; }
+button { font-family: inherit; cursor: pointer; }
+#app { display: flex; justify-content: center; min-height: 100vh; }
+
+.card { background: var(--card); border: 1px solid var(--linha); border-radius: 18px; padding: 14px 15px; }
+.btn { border: 0; border-radius: 999px; padding: 14px 16px; font-size: 15px; font-weight: 600; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.btn.primario { background: var(--verde); color: #fff; }
+.btn.primario:active { background: var(--verde2); }
+.btn.lima { background: var(--lima); color: #06200a; }
+.btn.sec { background: var(--card); color: var(--texto); border: 1px solid var(--linha); }
+.btn.perigo { background: transparent; color: var(--vermelho); border: 1px solid var(--linha); }
+.btn:disabled { opacity: .45; }
+.titulo { font-size: 12px; color: var(--sub); font-weight: 600; margin: 0 0 8px; }
+.grande { font-size: 28px; font-weight: 700; line-height: 1.1; letter-spacing: -.8px; }
+.sub { color: var(--sub); font-size: 13px; }
+.rot { font-size: 12px; font-weight: 600; color: var(--sub); display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; }
+.rot a, .rot button { color: var(--acento); font-weight: 600; background: none; border: 0; font-size: 12px; padding: 0; }
+.seg { display: flex; background: var(--trilho); border-radius: 999px; padding: 3px; }
+.seg button { flex: 1; border: 0; background: transparent; padding: 8px; border-radius: 999px; font-size: 13px; color: var(--sub); font-weight: 500; }
+.seg button.on { background: var(--card); color: var(--texto); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+input, textarea, select { font-family: inherit; font-size: 16px; border: 1px solid var(--linha); background: var(--card); color: var(--texto); border-radius: 14px; padding: 12px 14px; width: 100%; }
+input:focus, textarea:focus { outline: 2px solid var(--verde); border-color: transparent; }
+.ponto { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+/* ===== movimento ===== */
+.btn, .card, button { transition: transform .15s ease, background-color .2s, border-color .2s, box-shadow .2s, opacity .2s; }
+.btn:active:not(:disabled), button.card:active, a.card:active, .card[role=button]:active { transform: scale(.97); }
+/* conteúdo das telas entra em sequência */
+.pg > * { animation: sobe .5s cubic-bezier(.2,.8,.2,1) both; }
+.pg > *:nth-child(2) { animation-delay: .04s } .pg > *:nth-child(3) { animation-delay: .08s }
+.pg > *:nth-child(4) { animation-delay: .12s } .pg > *:nth-child(5) { animation-delay: .16s }
+.pg > *:nth-child(6) { animation-delay: .2s } .pg > *:nth-child(7) { animation-delay: .24s }
+.pg > *:nth-child(n+8) { animation-delay: .28s }
+@keyframes sobe { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes cresce { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes enche { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0s !important; transition-duration: 1ms !important; }
+}

@@ -1,0 +1,18 @@
+# Servidor do app + Caddy (HTTPS automático). Trocar api.app.ollem.com.br pelo endereço definido pelo TI.
+services:
+  api:
+    build: .
+    env_file: .env
+    volumes:
+      - ./dados-producao:/dados
+      - ./segredos:/segredos:ro
+    restart: unless-stopped
+  caddy:
+    image: caddy:2
+    ports: ["80:80", "443:443"]
+    command: caddy reverse-proxy --from api.app.ollem.com.br --to api:8090
+    volumes:
+      - caddy:/data
+    restart: unless-stopped
+volumes:
+  caddy:
